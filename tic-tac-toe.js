@@ -21,5 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
         status.textContent = `Player ${currentPlayer}'s turn`;
       }
     });
+
+    // Add mouseover event listener to change style on hover
+    square.addEventListener("mouseover", () => {
+      square.classList.add("hover");
+    });
+
+    // Add mouseout event listener to revert to original style on mouseout
+    square.addEventListener("mouseout", () => {
+      square.classList.remove("hover");
+    });
   });
 });
