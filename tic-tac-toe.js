@@ -5,6 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPlayer = "X"; // Initialize the current player as "X"
   let gameOver = false;
 
+  // Define the win patterns
+  const winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6] // Diagonals
+  ];
+
   // Function to reset the game
   const resetGame = () => {
     squares.forEach((square) => {
@@ -17,16 +24,34 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPlayer = "X";
   };
 
+  // Function to check for a win
+  const checkWin = () => {
+    for (const pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (
+        squares[a].classList.contains(currentPlayer) &&
+        squares[b].classList.contains(currentPlayer) &&
+        squares[c].classList.contains(currentPlayer)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // Function to check for a draw
+  const checkDraw = () => {
+    return [...squares].every((square) => square.classList.contains("X") || square.classList.contains("O"));
+  };
+
   squares.forEach((square) => {
     square.classList.add("square");
 
     square.addEventListener("click", () => {
       if (!square.classList.contains("X") && !square.classList.contains("O") && !gameOver) {
-        // Check if the square is empty and the game is not over
-        square.classList.add(currentPlayer); // Add the "X" or "O" class for styling
-        square.textContent = currentPlayer; // Add the X or O text
+        square.classList.add(currentPlayer);
+        square.textContent = currentPlayer;
 
-        // Check for a win or draw
         if (checkWin()) {
           status.textContent = `Congratulations! ${currentPlayer} is the Winner! 🎉`;
           status.classList.add("you-won");
@@ -35,35 +60,20 @@ document.addEventListener("DOMContentLoaded", () => {
           status.textContent = "It's a draw!";
           gameOver = true;
         } else {
-          // Switch the current player for the next turn
           currentPlayer = currentPlayer === "X" ? "O" : "X";
           status.textContent = `Player ${currentPlayer}'s turn`;
         }
       }
     });
 
-    // Add mouseover event listener to change style on hover
     square.addEventListener("mouseover", () => {
       square.classList.add("hover");
     });
 
-    // Add mouseout event listener to revert to the original style on mouseout
     square.addEventListener("mouseout", () => {
       square.classList.remove("hover");
     });
   });
 
   newGameButton.addEventListener("click", resetGame);
-
-  // Function to check for a win
-  const checkWin = () => {
-    // Your win condition logic goes here
-    // Return true if there's a win, otherwise return false
-  };
-
-  // Function to check for a draw
-  const checkDraw = () => {
-    // Your draw condition logic goes here
-    // Return true if it's a draw, otherwise return false
-  };
 });
